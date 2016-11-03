@@ -46,18 +46,45 @@ There are alternative ways of combining simular cases, check the slides.
 The card also have a Rank, this can either be a value between 2 and 10, or a Jack,King,Queen or an Ace.
 ```haskell
 data Rank = Numeric Integer | Jack | Queen | King | Ace
-  deriving Show
+  deriving (Show,Eq,Ord)
 ```
 You can also make this junk free by defining one case for each value.
 ```haskell
-data Rank = N1 | N2 | N3 ......  | N9 | N10
+data Rank = N1 | N2 | N3 | N4 | N5| N6 | N7 |N8 | N9 | N10
               | Jack | Queen | King | Ace
   deriving Show
 ```
 
-We also want to have a method that computes if a Rank "beats" another rank
+We also want to have a method that computes if a Rank "beats" another rank. This function has
+-- two arguments and returns a bool. However this method have 25 cases, and the "junk-free"
+-- datatype has 13*13 = 169 cases. We reduce the number of cases
 ```haskell
 rankBeats :: Rank -> Rank -> Bool
+rankBeats _ Ace = False --Nothing beats an Ace
+rankBeats Ace _ = True -- Ace beats anything
+rankBeats _ King = False -- nothing lower than a King beats king
+rankBeats King _ = True -- king beats everything under
+rankBeats _ Queen = False
+rankBeats Queen _ = True
+rankBeats _ Jack = False
+rankBeats Jack _ = True
+rankBeats (Numeric m) (Numeric n) = m > n
+```
+THere is an easier way of writing this, sonce the Rank derives Eq and Order
+```haskell
+rankBeats :: Rank -> Rank -> Bool
+rankBeats r1 r2 = r1>r2
+```
+We want to be able to return all ranks
+```haskell
+all_ranks' = [N2 .. Ace]
+```
 
-
+We can now define the card datatype. Either we use a pair of Rank and Suit
+```haskell
+data Card = (Rank,Suit)
+```
+Or we use a new datatype
+```haskell
+data Card = Card Rank Suit
 ```

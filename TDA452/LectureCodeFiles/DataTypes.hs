@@ -1,12 +1,4 @@
--- | Modelling a Playing Cards
--- Examples to introduce data types in Haskell
--- Functional Programming course 2016.
--- Thomas Hallgren
-
-{-
-This is just a skeleton, the definitions will be filled in during
-the lecture.
--}
+--Code file for Lecture 2 of Functional programming.
 
 -- | Every card has a suit  ♠ ♥ ♦ ♣
 data Suit = Spades | Hearts | Diamonds | Clubs
@@ -24,22 +16,21 @@ colour s = Red
 
 -- | Cards have ranks: 2, 3 .. 10, Jack, Queen, King, Ace
 data Rank = Numeric Integer | Jack | Queen | King | Ace
-  deriving Show
+  deriving (Show,Eq,Ord)
+
+-- alternative way
+data Rank' = N1 | N2 | N3 | N4 | N5| N6 | N7 |N8 | N9 | N10
+              | Jack' | Queen' | King' | Ace'
+  deriving (Show,Enum)
 
 -- | When does one rank beat another rank?
 rankBeats :: Rank -> Rank -> Bool
+rankBeats r1 r2 = r1>r2
 
-
---
-
-
--- | Alternative, junk-free Rank type
---data Rank' =
-
---all_ranks' =
+all_ranks' = [N2 .. Ace']
 
 -- | A card has a rank and a suit
--- data Card =
+data Card = Card Rank Suit
 
 --example_card_1 =
 --example_card_2 =
