@@ -82,9 +82,81 @@ all_ranks' = [N2 .. Ace]
 
 We can now define the card datatype. Either we use a pair of Rank and Suit
 ```haskell
-data Card = (Rank,Suit)
+type Card = (Rank,Suit)
 ```
 Or we use a new datatype
 ```haskell
 data Card = Card Rank Suit
+  deriving Show
+```
+Usually you write a function for inspecting the Rank And Suit
+```haskell
+rank :: Card -> Rank
+rank (Card r s) = r
+
+suit :: Card -> Suit
+suit (Card r s) = s
+```
+
+If you write the card function like:
+```haskell
+data Card = Card{rank::Rank suit::Suit}
+  deriving Show
+
+```
+You don't need these inspection methods, since they are already implemented by default.
+
+We want a function thet derives if a card beats another card
+```haskell
+cardBeats :: Card -> Card -> Bool
+cardBeats {Card r1 s1} {Card r2 s2} = s1==s2 && r1 'rankBeats' r2
+```
+This can alternativly be written as:
+```haskell
+cardBeats' card1 card2 =
+  suit card1 == suit card2 && rank card1 `rankBeats` rank card2
+```
+
+We want to define a Hand, which will either be empty or a *Add Card Hand* meaning a hand
+-- Whith the latest card added and the previous hand.
+```haskell
+  data Hand = Empty | Add Card Hand
+    deriving show
+```
+We want a method that derives if a given hand beats another card.
+```haskell
+handBeats :: Hand -> Card -> Bool
+handBeats Empty card = False -- An empty hand cannot beat nothin'
+handBeats (Add c h) card = cardBeats c card || handBeats h card -- Either the card beats the card or the hand does
+```
+If we want to be able to return the winner card we have
+
+```haskell
+betterCards :: Hand -> Card -> Hand
+betterCards Empty   card=Empty
+betterCards (Add c h) card  | c `cardBeats` card  = Add c (betterCards h card)
+                            | otherwise           = betterCards h cards
+```
+
+We also want to write a function that picks the card in a hand that can beat a given card.
+```haskell
+chooseCard :: Card -> Hand -> Card
+chooseCard beat hand
+    | hand `handBeats` card     = lowestCard (betterCards hand beat)
+    | hand `haveSuit` suit card = lowestCard (sameSuit hand (suit card))
+    | otherwise                 = lowestCard hand
+```
+We should implement the following helper methods for this to work
+```haskell
+  --lowestCard
+  lowestCard :: Hand -> Card
+  lowestCard Empty = error "empty hand"
+  lowestCard (Add c Empty ) = c
+  lowestCard (Add c hand) | rank c < rank low = c
+                          | otherwise = low
+    where
+      low = lowestCard h
+
+--sameSuit
+
 ```
