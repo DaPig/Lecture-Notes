@@ -12,18 +12,24 @@ import Test.QuickCheck
 
 (++) :: [a] -> [a] -> [a]
 [] ++ ys = ys
-[x:xs] ++ ys = x: (xs ++ys)
+xs ++ [] = xs
+(x:xs) ++ ys = x:(xs ++ys)
 
-cons x xs
-snoc xs x
+cons x xs = x:xs
+snoc xs x = xs ++ [x]
 
---reverse :: [a] -> [a]
+reverse :: [a] -> [a]
+reverse []    = []
+reverse (x:xs) = reverse xs ++ [x]
 -- complexity? how to make it more efficient?
 
 -- | Take the first n elements of a list
---take :: Int -> [a] -> [a]
+take :: Int -> [a] -> [a]
+take n _ | n<=0 = []
+take _ [] = []
+take n (x:xs) = x:take(n-1) xs
 
---prop_take n xs =
+prop_take n xs = length (take n xs) == n
 -- | Discard the first n elements of a list
 --drop :: Int -> [a] -> [a]
 

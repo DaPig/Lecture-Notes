@@ -65,11 +65,38 @@ Ascii cat for reasons.
   '' ''\\ \\
 ```
 
+We now have two other functions * cons that adds an element first in a list and snoc that adds an element to the end of a list.
+
+We also want a method that reverses a list:
+
+```haskell
+reverse :: [a] -> [a]
+reverse []    = []
+reverse (x:xs) = reverse xs ++ [x]
+```
+This is not very efficient, to make it more efficient we can *insert answer here, was to busy adding code cat*
+
+We now want a method *take* that takes the first n elements from a list
+
+```haskell
+take :: Int -> [a] -> [a]
+take 0 xs = []
+take _ [] = []
+take n (x:xs) = x:take(n-1) xs
+```
+Pretty self explainatory. Adds x to a list that contains the element (x+1, .. , n) of the original list.
+
+
+We write a function that checks if you can take n values from a list.
+
+```haskell
+  prop_take n xs = length (take n xs) == n
+```
 
 
 
-
-For example, the sorting function *Quicksort*
+We can also implement our own functions that may help us working with lists, for example. Quicksort.
+ *Quicksort*
 ```haskell
 qsort :: Ord a => [a] -> [a]
 qsort [] = []
@@ -78,10 +105,11 @@ qsort (x1:xs) = qsort smaller ++ [x1] ++ qsort bigger
     smaller = [x | x<-xs, x<=x1]
     bigger  = [x | x<-xs, x>x1]
 ```
-Cool story bro...
+> *Cool story bro...*
+
 However, there is a pitfall in quickcheck  when working with lists
 
 
 THanks for listening
 
-![](http://giphy.com/gifs/B3hcUhLX3BFHa)
+![](http://i.giphy.com/B3hcUhLX3BFHa.gif)
