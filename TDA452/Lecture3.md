@@ -61,7 +61,7 @@ Ascii cat for reasons.
  /\ | '.__ v /
 (_ .   /   "         
  ) _)._  _ /
-'.\ \|( / ( mrf
+'.\ \|( / ( purr
   '' ''\\ \\
 ```
 
@@ -161,10 +161,10 @@ qsort (x1:xs) = qsort smaller ++ [x1] ++ qsort bigger
     smaller = [x | x<-xs, x<=x1]
     bigger  = [x | x<-xs, x>x1]
 ```
-> *Cool story bro...*
 
 
 
 
-THanks for listening
+> You are a wizard frodo...
+
 ![](images/gandalf.gif)
