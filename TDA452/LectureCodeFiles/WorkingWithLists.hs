@@ -1,23 +1,21 @@
--- | Working with List
--- Examples to illustrate pattern matching, recursion and testing for lists
--- Functional Programming course 2016.
--- Thomas Hallgren
+--Code file for the third lecture
+  --of Functional Programming 07/11 -16
 
-{-
-This started out as a skeleton, the definitions were filled in
-during the lecture.
--}
 
 import Prelude hiding ((++),reverse,take,drop,splitAt,zip,unzip)
+--The above hides the standard functions defined.
+-- this gives us the opportunity to implement them ourselves
 import qualified Prelude
 
 import Test.QuickCheck
 
 
---(++) :: [a] -> [a] -> [a]
+(++) :: [a] -> [a] -> [a]
+[] ++ ys = ys
+[x:xs] ++ ys = x: (xs ++ys)
 
---cons x xs
---snoc xs x
+cons x xs
+snoc xs x
 
 --reverse :: [a] -> [a]
 -- complexity? how to make it more efficient?
@@ -29,7 +27,7 @@ import Test.QuickCheck
 -- | Discard the first n elements of a list
 --drop :: Int -> [a] -> [a]
 
---prop_take_drop n xs = 
+--prop_take_drop n xs =
 
 --nonprop_take_drop n xs =
 
@@ -53,7 +51,7 @@ import Test.QuickCheck
 --insert :: Ord a => a -> [a] -> [a]
 
 --prop_insert x xs
-                        
+
 -- | Insertion sort (sort a list by using insert)
 --isort :: Ord a => [a] -> [a]
 
