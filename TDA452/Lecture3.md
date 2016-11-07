@@ -112,4 +112,4 @@ However, there is a pitfall in quickcheck  when working with lists
 
 THanks for listening
 
-![Gandalf](http://i.giphy.com/B3hcUhLX3BFHa.gif)
+![](http://i.giphy.com/B3hcUhLX3BFHa.gif])
