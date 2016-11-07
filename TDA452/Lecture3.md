@@ -92,6 +92,62 @@ We write a function that checks if you can take n values from a list.
 ```haskell
   prop_take n xs = length (take n xs) == n
 ```
+we now want to a function that is the inverse of take. We want to drop the first n elements of a list.
+
+```haskell
+drop :: Int -> [a] -> [a]
+drop 0 xs = xs
+drop n (x:xs) | n>0 = drop (n-1) xs
+```
+
+The check function for drop, we check this via taking the first n elements and combining the last (length -n) elements. This should sum up to xs
+
+```haskell
+prop_take_drop n xs = take n xs ++ drop n xs == xs
+```
+This passes the quicktest. However, there is a pitfall in quickcheck  when working with lists, if we write another prop function that puts the elements in the opposite order
+```haskell
+  nonprop_take_drop n xs = drop n xs ++ take n xs = xs
+```
+THis also passes. This is because quickcheck will test
+```haskell
+  nonprop_take_drop :: Int -> [()] -> Bool
+```
+With the empty values *[()]* and this passes, seeing as they are all the same elements and therefor passes the check. The test works only if we only care about the length of the lists.
+
+> Be ware
+
+We can counter this by avoiding default values. We run this command:
+
+```haskell
+  :set -XNoExtendedDefaultRules
+```
+There are several other function we can implement to overrride the base functions. We don't have time for all of them. We choose a few:
+
+```haskell
+zip :: [a] -> [b] -> [(a,b)]
+zip (x:xs) (y:ys) = (x,y):zip xs xy
+zip _       _     = []
+
+```
+
+This zip function zips two lists into a tuple. We have the opposite
+```haskell
+unzip :: [(a,b)] -> ([a],[b])
+unzip [] = ([],[])
+unzip ((x,y):xys) = let (xs,ys) = unzip xys in zip xs ys == xys
+```
+THis returns a tuple of two list from a tuple of two values
+
+Test functions:
+
+```haskell
+prop_zip_unzip xys = let (xs,ys) = unzip xys in zip xs ys == xys
+
+
+prop_unzip_zip xs ys = unzip (zip xs ys) == (xs,ys)
+
+```
 
 
 
@@ -107,7 +163,7 @@ qsort (x1:xs) = qsort smaller ++ [x1] ++ qsort bigger
 ```
 > *Cool story bro...*
 
-However, there is a pitfall in quickcheck  when working with lists
+
 
 
 THanks for listening
