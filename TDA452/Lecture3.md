@@ -111,5 +111,4 @@ However, there is a pitfall in quickcheck  when working with lists
 
 
 THanks for listening
-
-![](http://i.giphy.com/B3hcUhLX3BFHa.gif]]
+![](images/gandalf.gif)
