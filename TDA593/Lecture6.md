@@ -18,3 +18,8 @@ An event represent something that has happened. This may trigger a transition. T
 We can have guards. These must be true if a transition is to be performed.
 
 When a transition is taken, the behaviour that is excecuted is called an Effect.
+
+When you enter a state you may have an entry behaviour. THis is done on the transition to the state, you may also have an exit behaviour. THat is made on the leaving of the state.
+
+
+A history state, defines what has happened in a composite state.
