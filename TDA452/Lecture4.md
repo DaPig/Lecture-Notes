@@ -71,28 +71,3 @@ We can also write anonymous functions if we only want them on one place
 f3 xs = foldr snoc [] xs
   where snoc y ys = ys++[y]
 ```
-
-# Overloading and type classes
-We can overload methods in haskell, but haskell takes it a step further.
-
-```haskell
-(*) :: Num a => a -> a -> a
-square x = x* x
-square :: Num a => a -> a
-```
-the function square inherits the overloading of the operator.
-
-A type class declares a set of overloading functions. For example *Num*
-
-```haskell
-class Num a where
-   (+), (*), (-) :: a -> a -> a
-   negate, abs, sigum :: a -> a
-   fromInteger :: Integer -> a
-   -- ...
-```
-Instance declarations provides implementation for the overloaded functions for a specific type
-```haskell
-  instance Num Int where -- ...
-```
-The eq class uses this for almoast every predefined types.
