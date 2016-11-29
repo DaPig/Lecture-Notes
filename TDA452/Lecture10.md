@@ -141,5 +141,88 @@ oneOrMore item = (:) <$> item <*> zeroOrMore item
 ```
 Note; In GHC 7.10+ the Applicative is a superclass of the Monads class.
 
+# Part 2;Symbolic Expressions
+Last week we had a datatype for expressions, we add a variable to this;
+```haskell
+
+data Expr = Num Integer
+          | Var Name       -- new
+          | Add Expr Expr
+          | Mul Expr Expr
+
+type Name = String
+```
+Say we want to compute a list of all the variable names in a expression
+```haskell
+vars :: Expr -> [Name]
+vars (Num n) = []
+vars (Var x) = [x]
+vars (Add a b) = vars a `union` vars b
+vars (Mul a b) = vars a `union` vars b
+```
+And evaluate a expression:
+```haskell
+eval :: [(Name,Integer)] -> Expr -> Integer
+eval env (Num n) = n
+eval env (Var x) = fromJust (lookup x env)
+eval env (Add a b) = eval env a + eval env b
+eval env (Mul a b) = eval env a * eval env b
+
+----where
+lookup   :: Eq key => [(key,value)] -> key -> Maybe value
+fromJust :: Maybe a -> a
+```
+Lookup takes an integer, because it can fail.
+
+If we want to differentiate a expression we can do:
+```haskell
+diff :: Expr -> Name -> Expr
+diff (Num n)   x = Num 0
+diff (Var y)   x = if y==x then Num 1 else Num 0
+diff (Add a b) x = Add (diff a x) (diff b x)
+diff (Mul a b) x = Add (Mul a (diff b x)) (Mul (diff a x) b)
+```
+
+This is not very pretty, we want to change the uses of Mul and Add to use the methods mul and add
+```haskell
+add (Num 0) b = b
+add a (Num 0) = a
+add a b = Add a b
+
+mul (Num 0) b = Num 0
+mul a (Num 0) = Num 0
+mul (Num 1) b = b
+mul a (Num 1) = a
+mul a b = Mul a b
+```
+THis is better, but it needs to be simplyfied even further.
+WE simplify the eval function using monads.
+
+```haskell
+evalA (Num n)   = pure n
+evalA (Add a b) = pure (+) <*> evalA a <*> evalA b
+evalA (Mul a b) = pure (*) <*> evalA a <*> evalA b
+```
+A case we usually want to avoid is division by zero, this can be done as:
+```haskell
+data Expr = -- ... Num, Add, and Mul as before ...
+            Div Expr Expr
+
+evalD :: Expr -> Maybe Integer
+evalD (Num n)   = pure n
+evalD (Add a b) = pure (+) <*> evalD a <*> evalD b
+evalD (Mul a b) = pure (+) <*> evalD a <*> evalD b
+evalD (Div a b) = do x <- evalD a
+                     y <- evalD b
+                     safeDiv x y
+
+safeDiv :: Integer -> Integer -> Maybe Integer
+safeDiv x 0 = Nothing
+safeDiv x y = Just (x `div` y)
+```
+
+
+
+
 
 ![](images/partyOn.gif)
