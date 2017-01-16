@@ -1,1 +1,1 @@
-# Lecture-Notes
+This reposotory contains notes, excercises other files related to the different courses I am taking at chalmers. Keep in mind that these are mostly written during the lectures and may therefor contain speculation concerning the topic at hand. Some of the topics might also have been misinterpreted and therefore the notes are not true. Hence, these are mostly just for me. 
