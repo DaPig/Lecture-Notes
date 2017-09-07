@@ -61,4 +61,25 @@ Creating model(formula) describing the dependecy between two variables. We creat
 
 However, the further into the future one wants to predict, the less acurate the model becomes. As such one needs to remodel the model once in a while.
 
-We can also create confidence intervals for our models. If they fall within this interval, the model is still okay. 
+We can also create confidence intervals for our models. If they fall within this interval, the model is still okay.
+
+## Orthogonal Defect Classification
+" Two lines are orthogonal of they never intersect" OCD is a mean to work with the lifecycle of a defect. OCD Consists of two classifications:
+  * Opening, when defect was detected
+  * Closing, when defect was investigated
+
+  We need to specify the impact of the defect. Either it was found in-process, then it specify how it *would have* impacted the customer, when found in the field it specity *how* it inpacted. The inpact is important as it functions as a base on how to prioritize various defects.
+
+### Root cause analysis
+RCA is used to find the rot cause of defects, what, how and why defect occurs. There are a number of steps one needs to follow in RCA in order to understand and prevent simular defects.
+
+### Ishikawa Diagram: principle
+The cause-and-effect diagram has the defect as the effect, the cause is split into categories, standard are:
+* Equipment
+* Process
+* Principle
+* Materials
+* Enviroment
+* Management
+
+These also have causes, all of which makes up the problem/defect
