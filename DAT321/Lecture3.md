@@ -55,3 +55,10 @@ Code reviews and pull requests are very important when developing to make sure t
 Is a strategy to estimate how many defects a software may have using statistics. We check how many faults we found that overlap, using that we can calculate an estimation of the number of total faults in the software.
 
 ## Statistic Defect Prediction
+
+### Basics
+Creating model(formula) describing the dependecy between two variables. We create a model and determine how good it is by measuring the mean square error. However, this is bad as outliers gives a large mean square error even if the model is a good approximation otherwise.
+
+However, the further into the future one wants to predict, the less acurate the model becomes. As such one needs to remodel the model once in a while.
+
+We can also create confidence intervals for our models. If they fall within this interval, the model is still okay. 
