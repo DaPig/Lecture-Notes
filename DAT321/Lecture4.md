@@ -24,3 +24,17 @@ has been released it is tested again (in production).
 
 
 -----------
+
+## Statistical Quality Assurance
+We can use statistics in quality assurance. As such we collect a bunch of data during some span of time, categorize and classify them on severity, then we check how the number of defects have changed once solutions have been made to reduce the number of defects. If the p-value is lower than 0.05 then there is a Statistical significance. That is good.
+
+
+## Models
+Why do we use statistical models in software quality. To try to predict the future. We can see that there is almost a linear correlation between lines of code and # of defects.
+
+We check if there are any outliers and if there are cases for them we can remove them. We also check if the data is normally distributed. Otherwise we can create a model. For that we need to calculate some sums.  A typical model is
+
+y(hat) = alpha(hat) + x*beta(hat) + epsilon
+For the formulaes, check slides.
+
+For calculating the epsilon we check the standard deviation for the regression.  
