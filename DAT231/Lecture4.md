@@ -26,3 +26,5 @@ When doing this one needs to avoid ambiguities, words like 'or' and pronouns sho
 
 ### Data Requirements
 A data model is related to the data that is handeled in the application, examples are 'ER-diagrams', 'data-dictionary' and so forth. Very easy for experts to grasp, might be hard for users, depending on type.
+
+In specifying functional requirements there are multioke tools to descrie these, such as context diagrams, event-and function lists, feature requirements, screens and prototypes.
