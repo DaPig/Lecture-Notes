@@ -53,4 +53,15 @@ If we have two ratio measurments, we can measure the correlation between these. 
 
 Remember that correlation != causation
 
-if we have |r| > 0.8 we have a strong association, and as such there is strong evidence for causation. 
+if we have |r| > 0.8 we have a strong association, and as such there is strong evidence for causation.
+
+### Validity
+Validity determines to which degree a method of measurment reflect the true meaning of the concept being investigated.
+
+### Reliability
+If the study can be reproduced and reach the same conclusion, the research instrument is reliable.
+
+### Precision
+PRecise measurents is one that has nearly the same value every time it is measured. As such, the *repeatability* is high.
+
+Doing a quantitative analysis is way way way simplet then a qualitative one. 
