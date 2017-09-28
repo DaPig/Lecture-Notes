@@ -38,4 +38,4 @@ THese can be combined with different prioritization techniques to determine the 
 This is determining what requirements should be in the next release, goes hand in hand with agile software development. This is determined by the release plan. This should provide maximum business value by offering the best possible blend of features. Also satisfy the most important stakeholders, and so forth.
 
 ### Interdependencies
-This describes different fetures that are dependent on one another and as such should be shipped together. WE can then create a dependency graph to plan which features to implement first. 
+This describes different features that are dependent on one another and as such should be shipped together. WE can then create a dependency graph to plan which features to implement first.
