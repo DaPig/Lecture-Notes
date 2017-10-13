@@ -2,7 +2,7 @@
 ## Lecture 2
 
 ---
-SUmmary: 
+SUmmary:  This lecture is all about measuring external quality on a high level, as well as some growth models and tools for determining quality.
 
 Keywords: 
 External software quality: External quality mean all the properties of the software as a project that customers can enjoy, that is Conformaty to their expectations. For example, reliability accuracy and so forth.
