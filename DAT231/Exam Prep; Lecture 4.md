@@ -3,6 +3,7 @@
 ### Specification 1
 
 Summary: 
+This lecture is all about requirements. that is the elicitation phase.
 ---
 
 Keywords: 
