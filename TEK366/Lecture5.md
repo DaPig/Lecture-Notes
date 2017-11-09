@@ -44,4 +44,21 @@ People like Donald Trump likes to think of themself as "Natural Born Leaders". T
 
 Maylor discusses the importance of time management for leaders. Proactive time management, such as looking what can harm us is ususally important to spend time on. Also Reactive, for example putting out fires. And inactive time, that is, the importance of resting. 
 
+### 4P 
+THis method consists of 4 P-s for project management.
+* Plan your way out
+* Pace yourself
+* Pamper/reward yourself on accomplishments
+* Piss yourself laughing.
+However, one cannot command enthusiasm. 
+
+
+Further. Leadership is a personal dicipline according to maylor. One should set goals, short medium and long term. These should be SMART(acronym). 
+
+## QUality Systems
+Controlling quality for a project is important as it shows that the output and the process of delivery is qualitative. 
+
+
+## Erned Value 
+Erned value puts together cost and performance and tinme to give a quantifiable measure. Using this we can calculate an indiccation on where we are going, if we are on budget and time etc. 
 
