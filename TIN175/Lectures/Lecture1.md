@@ -88,7 +88,7 @@ It is all in the definitions, what actually is "Thinking" and "Intellegence"
 The most important paper of AI is "Computing Machinery and INtellegence" by Alan Turing. We should read this. 
 
 ### Brain Replacement
-Can we replace a brain with AI, i.e. change the neurons to computers.
+Can we replace a brain with AI, i.e. change the ne urons to computers.
 
 ### The chinese room
 If a machine can translate into chinese by a rulebook. Does the system actually understand chinese? 
