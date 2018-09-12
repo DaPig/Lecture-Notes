@@ -42,4 +42,4 @@ One can visualize software using various graphics, example includes circular bun
 
 
 ## Documentation
-DOcumentation can be generated from source code, for example javadoc which generates documentation on variables and methods with their arguments. 
+Documentation can be generated from source code, for example javadoc and doxygen which generates documentation on variables and methods with their arguments and also using the comments in the code 
