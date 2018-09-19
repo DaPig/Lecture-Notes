@@ -27,4 +27,14 @@ If we also introduce the notion of atomicity we have weak atomicity, i.e. can on
 ### d_step
 This introduces a deterministic sequence and he choices are handled as a single step, if the first statmenet blocks the rest are not run att all while if any other blocks an error is thrown.
 
-the keyword atomic is very similar but gives weak atomicity. 
+the keyword atomic is very similar but gives weak atomicity.
+
+## Mutual Exclusion
+Mutual exclusion can be modeled via the usage of a ghost variable, but using an atomic step is better.
+
+Other ways of combating critical section problems include
+* Temporal logic
+* Restrict the number of processes in critical section
+* More fine grain exclusion conditions, i.e. more critical sections.
+
+Semaphores can be modeled in promela by having a global critical section variable and doing the entering of the critical section in an atomic block.
