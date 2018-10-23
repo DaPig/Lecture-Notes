@@ -1,0 +1,23 @@
+1) Our assertion checks that every forks are used by at most one person at a time (i.e. has a value
+smaller than 2 and greater than -1).
+
+2) As we do not get any "invalid end states"  when we run in spin without any LTL formulas.
+we have proven that our model does not deadlock.
+
+4) We cannot assure that our model is completely fair, as there might exist an infinite
+trace where no one gets to eat. I.e. there is always the risk that even though every philosopher
+gets his turn AND the forks are free, he can still always just think instead. To model this
+we added an additional ltl formula that checks if there is an infinite trace where no one will
+eat. And there is. Thus this formula managed to prove that our model is not always fair.
+Running with weak fairness does not influence this result.
+
+4)
+We chose to model our LTL based on having 4 forks,
+ltl forksInUse {[](
+        (forks[0] <= 1 && forks[0] >= 0) && (forks[1] <= 1 && forks[1] >= 0) &&
+        (forks[2] <= 1 && forks[2] >= 0) && (forks[3] <= 1 && forks[3] >= 0)
+      )};
+Which translates to 'it will always happen for each fork that the fork is
+only being used by one or zero philosopher at any given state.
+Verifying this ltl formula under safety or acceptance does not yield any errors, i.e. This
+formula does not verify anything that the assertions does not do.

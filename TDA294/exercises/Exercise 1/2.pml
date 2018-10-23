@@ -19,11 +19,12 @@ active proctype ARRAY() {
 		   s++
   od;
   s = 0;
-
   do
-    :: (s >= N) -> break
-    :: else -> sum = sum + a[s]; s++
-  od
+    :: (s>=N) -> break
+    :: else ->
+      sum += a[a]
+      s++
+    od;
 
   printf("The sum is: %d\n", sum)
 }

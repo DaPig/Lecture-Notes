@@ -1,0 +1,134 @@
+Task 2: Spin
+We chose to validate our ltl formula using the acceptance criteria as our LTL formula is
+of a liveness form as we expect something good to eventually happen (both are ok).
+Weak fairness does not influence the result of  our ltl formula as they always eventually
+reach their "destination".
+
+Task 3: Introducing the attacker
+We used the acceptance criteria to validate our formula here as in task 2. It breaks.
+This is due to the fact that the intruder randomly selects whether to send out a message,
+id the intruder does not, Alice or bob cannot continue as they are waiting on a specific
+message and never reaches their ok-state.
+The trail here does not say very much, thus we do not include this. 
+
+
+Task 6: Attack
+Property propAB is violated as Alice sets the intruder to be her communication partner.
+If then bob manages to finish he reaches the 'ok' state, and always believes he is talking to Alice
+(he does not know he is talking via an intermediary) And Alice also manages to finish her
+run. Thus both parties have a status of 'ok' but Alice has selected the intruder to be her
+communication partner. Further, propB fails as bob manages to finish his run, but he does not realize he is talking via a
+intermediary that steals his nonce.
+
+The trail for propAB & propB (only ones that breaks) are shown below. We ran these using the safety
+criteria given that we always expect these to hold.
+Note that statusA is err, this is because statusB is set to ok and the ltl formula
+terminates in between the send event and the `statusA=ok´ assignment in Alice.
+
+---
+propAB
+Never claim moves to line 15    [(1)]
+              Bob is alive!
+ 10:    proc  0 (Alice:1) NS6.pml:48 Sent msg1,agentI,keyI,agentA,nonceA    -> queue 1 (network)
+ 11:    proc  2 (Intruder:1) NS6.pml:130 Recv msg1,agentI,keyI,agentA,nonceA    <- queue 1 (network)
+                  Intercepted msg1, nonce = 5 25:    proc  2 (Intruder:1) NS6.pml:180 Sent msg1,agentB,keyI,agentA,nonceA    -> queue 1 (network)
+ 26:    proc  1 (Bob:1) NS6.pml:97 Recv msg1,agentB,keyI,agentA,nonceA    <- queue 1 (network)
+ 30:    proc  1 (Bob:1) NS6.pml:105 Sent msg2,agentA,keyA,nonceA,nonceB    -> queue 1 (network)
+ 31:    proc  0 (Alice:1) NS6.pml:55 Recv msg2,agentA,keyA,nonceA,nonceB    <- queue 1 (network)
+ 35:    proc  0 (Alice:1) NS6.pml:74 Sent msg3,agentI,keyI,nonceB,0    -> queue 1 (network)
+ 36:    proc  2 (Intruder:1) NS6.pml:130 Recv msg3,agentI,keyI,nonceB,0    <- queue 1 (network)
+                  Intercepted msg3, nonce = 4 54:    proc  2 (Intruder:1) NS6.pml:180 Sent msg3,agentB,keyB,nonceB,nonceI    -> queue 1 (network)
+ 55:    proc  1 (Bob:1) NS6.pml:107 Recv msg3,agentB,keyB,nonceB,nonceI    <- queue 1 (network)
+spin: _spin_nvr.tmp:14, Error: assertion violated
+spin: text of failed assertion: assert(!(!((!(((statusA==ok)&&(statusB==ok)))||((partnerA==agentB)&&(partnerB==agentA))))))
+Never claim moves to line 14    [assert(!(!((!(((statusA==ok)&&(statusB==ok)))||((partnerA==agentB)&&(partnerB==agentA))))))]
+spin: trail ends after 68 steps
+#processes: 3
+        partnerA = agentI
+        partnerB = agentA
+        statusA = ok
+        statusB = ok
+        knows_nonceA = 1
+        knows_nonceB = 1
+
+----
+propB
+---
+Never claim moves to line 33    [(1)]
+              Bob is alive!
+ 10:    proc  0 (Alice:1) NS6.pml:48 Sent msg1,agentI,keyI,agentA,nonceA    -> queue 1 (network)
+ 11:    proc  2 (Intruder:1) NS6.pml:130 Recv msg1,agentI,keyI,agentA,nonceA    <- queue 1 (network)
+                  Intercepted msg1, nonce = 5 25:    proc  2 (Intruder:1) NS6.pml:180 Sent msg1,agentB,keyI,agentA,nonceA    -> queue 1 (network)
+ 26:    proc  1 (Bob:1) NS6.pml:97 Recv msg1,agentB,keyI,agentA,nonceA    <- queue 1 (network)
+ 30:    proc  1 (Bob:1) NS6.pml:105 Sent msg2,agentA,keyA,nonceA,nonceB    -> queue 1 (network)
+ 31:    proc  0 (Alice:1) NS6.pml:55 Recv msg2,agentA,keyA,nonceA,nonceB    <- queue 1 (network)
+ 35:    proc  0 (Alice:1) NS6.pml:74 Sent msg3,agentI,keyI,nonceB,0    -> queue 1 (network)
+ 36:    proc  2 (Intruder:1) NS6.pml:130 Recv msg3,agentI,keyI,nonceB,0    <- queue 1 (network)
+                  Intercepted msg3, nonce = 4 54:    proc  2 (Intruder:1) NS6.pml:180 Sent msg3,agentB,keyB,nonceB,nonceI    -> queue 1 (network)
+ 55:    proc  1 (Bob:1) NS6.pml:107 Recv msg3,agentB,keyB,nonceB,nonceI    <- queue 1 (network)
+spin: _spin_nvr.tmp:32, Error: assertion violated
+spin: text of failed assertion: assert(!(!((!(((statusB==ok)&&(partnerB==agentA)))||!(knows_nonceB)))))
+Never claim moves to line 32    [assert(!(!((!(((statusB==ok)&&(partnerB==agentA)))||!(knows_nonceB)))))]
+spin: trail ends after 66 steps
+#processes: 3
+        partnerA = agentI
+        partnerB = agentA
+        statusA = err
+        statusB = ok
+        knows_nonceA = 1
+        knows_nonceB = 1
+
+---
+Task 7: Patching the protocol
+The effect of the patch was that Alice knows to check the identity of the principal in the
+second message, if this is not correct, i.e. the communication partner selected by Alice is
+not the same as in the returned message. Then we have an intruder and Alice can never finish
+her run. The intruder cannot do anything with the second message as it is encrypted under Alices key
+the only thing the intruder could do is to send a new message with nonceI and when the intruder
+sends back the message to b, b will not be ok and our ltl formulas will hold. I.e. there is no way
+the intruder can break the protocol now.
+
+Trails for the three properties (propA, propB, propAB) are shown below
+ (this is what we got out,  there is were network traces that broke the assertions).
+---
+propAB
+Full statespace search for:
+    never claim             + (propAB)
+    assertion violations    + (if within scope of claim)
+    cycle checks           - (disabled by -DSAFETY)
+    invalid end states    - (disabled by never claim)
+
+State-vector 76 byte, depth reached 58, errors: 0
+    95038 states, stored
+    82221 states, matched
+   177259 transitions (= stored+matched)
+        0 atomic steps
+hash conflicts:       124 (resolved)
+---
+propA
+Full statespace search for:
+    never claim             + (propA)
+    assertion violations    + (if within scope of claim)
+    cycle checks           - (disabled by -DSAFETY)
+    invalid end states    - (disabled by never claim)
+
+State-vector 76 byte, depth reached 58, errors: 0
+    95038 states, stored
+    82221 states, matched
+   177259 transitions (= stored+matched)
+        0 atomic steps
+hash conflicts:       143 (resolved)
+---
+propB
+Full statespace search for:
+    never claim             + (propB)
+    assertion violations    + (if within scope of claim)
+    cycle checks           - (disabled by -DSAFETY)
+    invalid end states    - (disabled by never claim)
+
+State-vector 76 byte, depth reached 58, errors: 0
+    95038 states, stored
+    82221 states, matched
+   177259 transitions (= stored+matched)
+        0 atomic steps
+hash conflicts:       157 (resolved)

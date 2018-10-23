@@ -47,10 +47,31 @@ We have a set of variables where each one have a unique type. Terms are describe
 ### Atomic formula
 Similar to first order team but is either true or false ore a stametent that leads to these. Recursive.
 
-## Semantic
+## Semantics
 Semantics in First order logic includes the following:
 
 * Domain: The meaning of terms and variables
 * Interpretation: Assigning meaning to the symbos
 * Valuation: Evaluates an interpretation in a domain to a truth value
 * Validity: A formula is valid if it is true in all domains and interpretaiton.
+
+
+---
+# Sequent Calculus
+
+## Reasoning by syntactic transformation
+We talk about provability now, the notion of proving a formula is valid.
+
+Logic calculus: Sequent calculus is based on a squent. A sequent is two lists of formulas for the logic we are talking about (first order logic),  We have a antecedent to a succedent, where the former identifies the latter.
+
+This has the same meaning as that if all logic formulas of the actecedent is true, then at least one in the succedant must be true (implies this). With this we can build rules, syntactic transformation schemas. where we have several premises and one conclusion.
+
+If we consider the antecedent and succedent as sets of formulas (these may be empty) we can have a set of formulas that matches a sequent with a occurrence of a conjunction in a succedent.
+
+We can construct a syntactic transformation schema for sequents that reflect the semantics for connectives. This means we can successfully prove a conclusion by proving its premisses. A rule is sound iff the validity of its premises implies the validity of its conclusion.
+
+If we want to prove a formula we want to find a rule that matches the formula, instantiate the rule such that the colcusion is identical to the formula and apply the instantiation to all premisses of the formula that results in new goals. The recursively find the proofs. WE close when we find a proof branch where we have a rule without premisses.
+
+A proof is closed iff all branches are closed.
+
+Proving a formula consists of first specifying the formula, finding a number and checking against the formula. ´´by replacing each occurence of an element in the set by that number. 
