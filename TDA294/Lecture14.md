@@ -20,4 +20,7 @@ Slide 11. U is the state when we reach the method call. We keep the pre-state as
 Basically we erase/hide the locations on the heap that contain the assignable items.
 
 
-This can also be extended to the exception specification case, i.e. we only know the method throws something, but not when. Then we change the method call for the throwing of an exception.
+This can also be extended to the exception specification case, i.e. we only know the method throws something, but not when. Then we change the method call for the throwing of an exception. Key only uses one rule for both of these cases. To test the contract instead we use the contract proving strategy in Key.
+
+# Loops
+It is hard to keep track of what happens in a loop. Often we want to Unwind the loop. But this is impractical for loops of a higher number. We use a loop invariant. This invariant is preserved by the loop body and as it is valid in the beginning, it should also be valid in the end of the loop. We need to construct this such that it implies the postcondition of the loop. However, a drawback of this basic invariant rule, we have to throw away the context. 

@@ -1,10 +1,10 @@
 public class BinarySearch {
 
 	private /*@nullable@*/ int[] numbers;
-	
+
 	/* size is the number of used positions in the array (since the list of numbers will become shorter when removing duplicates) */
 	private /*@spec_public@*/ int size;
-	
+
 	private /*@spec_public@*/ int query;
 
 	public BinarySearch(int[] numbers, int query) {
@@ -40,7 +40,7 @@ public class BinarySearch {
 		return searchResult;
 	}
 
-	
+
 
 	/*@
 	  @ public normal_behavior
@@ -63,6 +63,10 @@ public class BinarySearch {
 	  @*/
 	private void eliminateDuplicates(int[] numbers) {
 		int i = 0;
+		if(numbers.length == 0) {
+			size = -1;
+			throw new RuntimeException();
+		}
 		while (i < numbers.length - 1) {
 			if (i >= size)
 				break;
