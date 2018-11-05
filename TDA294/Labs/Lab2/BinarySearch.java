@@ -45,7 +45,7 @@ public class BinarySearch {
 	/*@
 	  @ public normal_behavior
 	  @ requires numbers != null;
-	  @ requires (\forall int i, j; i >= 0 && i < j && j <= size; numbers[i] <= numbers[j]);
+		  @ requires (\forall int i, j; i >= 0 && i < j && j <= size; numbers[i] <= numbers[j]);
 	  @ ensures (\forall int e;
           @         (\exists int i; 0 <= i && i <= size; numbers[i] == e) <==>
           @	    (\exists int i; 0 <= i && i <= \old(size); \old(numbers)[i] == e));
@@ -63,10 +63,6 @@ public class BinarySearch {
 	  @*/
 	private void eliminateDuplicates(int[] numbers) {
 		int i = 0;
-		if(numbers.length == 0) {
-			size = -1;
-			throw new RuntimeException();
-		}
 		while (i < numbers.length - 1) {
 			if (i >= size)
 				break;

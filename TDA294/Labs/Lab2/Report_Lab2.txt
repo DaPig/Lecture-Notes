@@ -1,0 +1,47 @@
+3.1)
+When expanding the proof tree we selected to inline the report method as the specification did not help us very much.
+But for the eliminateDuplicates we chose to use the method contract instead as it promised that the element we are looking
+for exists. For the search we used the method contract as the ensures clauses was beneficial to us, further the loop did not have any loop invariant,
+thus it would be hard to inline the method as we would have to unwind the loop.
+
+After this we reached a state where we could not prove that the element we were looking for was still in the array (the pre-conditons to search).
+The solution to this was to do an all-left on a postconditions to removeDuplicates to ensure that self.query still existed (it could have moved index when removing duplicates)
+We then managed to solve the task.
+
+
+3.2) We added the following code to the key file such that the exceptional_behaviour holds.
+if(numbers.length == 0) {
+  size = -1;
+  throw new RuntimeException();
+}
+I.e. this block was missing completely, we also added
+
+numbers.length > 0
+
+in the normal_behavior case.
+
+3.3 a) When running the prover, we chose to use the method contract as the first one (drawVertical()) ensures that the class invariants hold in the post-state which is a precondition for drawHorizontal, which is the next call.
+So, to complete the proof, we choose to use the contract for drawHorizontal as it also ensures that the class invariants holds.
+
+3.3 b) The problem with the loop invariant was that it did not hold after the loop was done, the first line in the invariant
+
+0 <= i && i < canvas[depth].length
+
+Does not hold as i is incremented one final time and is thus equal to canvas[depth].length, thus this line do not hold. The fix is simple, increase the bound by 1 such that it becomes.
+
+0 <= i && i <= canvas[depth].length
+
+
+4.) From the JML we wrote in assignment 2 we created the corresponding java code. Notes about this follows:
+
+* For the get and set renderer the code was easy to write, just a set/get operation.
+Proving the get-value however was more difficult.
+
+* For the isSingleDigit, the JML was almost able to be directly translated to java.
+
+* For clear() we needed a loop to clear the array and thus a loop invariant was required.
+
+* For the enterCharacter() and backspace() we needed to make if-statements to cover the normal and exceptional
+cases and throw errors accordingly.
+
+All of these were then to be proved by KeY, some of which managed to prove that all our methods fulfilled the method contracts.

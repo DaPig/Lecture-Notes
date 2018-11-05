@@ -28,9 +28,9 @@ public class NumericTextBox
 	 */
 
 	/*@
-	  @ public invariant (cursorPosition <= content.length +1 && cursorPosition >= 0);
+	  @ invariant (cursorPosition  <= content.length && cursorPosition >= 0);
 	  @*/
-	private /*@spec_public@*/int cursorPosition;
+	private /*@spec_public@ non_null*/int cursorPosition;
 
 	/**
 	 * This array stores the contents of the text box. At every position
@@ -42,25 +42,34 @@ public class NumericTextBox
 	- the content before the cursor contains only single digits
 	- the content after the cursor is EMPTY
 	*/
+
 	/*@
-	  @ public invariant (\forall int i, j; i>=0 && i<j && i < cursorPosition && j < content.length;
-	  	@ (content[i] < 10 && content[i] >= 0 && content[j] == null));
-	  @*/
-	private /*@spec_public@*/int[] content;
+	@ invariant (\forall int i; i>=0 && i < cursorPosition; content[i] < 10 && content[i] >= 0);
+	@*/
+
+	/*@
+	@ invariant (\forall int i; i>=cursorPosition && i<content.length; content[i]==EMPTY);
+	@*/
+
+	private /*@spec_public non_null@*/int[] content;
 
 	/**
 	 * Holds the current TextBoxRenderer. This can be null, which means that there
 	 * is no renderer assigned.
 	 */
-	private /*@nullable@ spec_public@*/TextBoxRenderer textBoxRenderer;
+	private /*@spec_public nullable@*/TextBoxRenderer textBoxRenderer;
 
 	/**
 	 * Gets the currently assigned TextBoxRenderer.
 	 */
 
-	public /*@pure@*/TextBoxRenderer getRenderer()
+ /*@ public normal_behavior
+	@ ensures textBoxRenderer != null ==> \result == this.textBoxRenderer;
+	@ assignable \nothing;
+	@*/
+	public /*@ pure @*/ TextBoxRenderer getRenderer()
 	{
-		return this.renderer;
+		return textBoxRenderer;
 	}
 
 	/**
@@ -69,11 +78,14 @@ public class NumericTextBox
 	 */
 	/*@
 	  @ public normal_behavior
+		@ requires true;
 	  @ ensures textBoxRenderer == renderer;
+		@ ensures true;
+		@ assignable textBoxRenderer;
 	  @*/
 	public void setRenderer(TextBoxRenderer renderer)
 	{
-		this.renderer = renderer;
+		this.textBoxRenderer = renderer;
 	}
 
 	/**
@@ -85,7 +97,7 @@ public class NumericTextBox
 	/*@
 	  @ public normal_behavior
 	  @ requires input != null;
-	  @ ensures input >= 0 && input <= 9;
+	  @ ensures \result == (input >= 0 && input <= 9);
 	  @*/
 	public /*@pure@*/boolean isSingleDigit(int input)
 	{
@@ -96,26 +108,31 @@ public class NumericTextBox
 	 * Clears the text box and resets the cursor to the start.
 	 * Also sets the contentChanged flag of the current TextBoxRenderer, if any.
 	 */
+
 	/*@
 	  @ public normal_behavior
-	  @ ensures (\forall int i; i >= 0 && i <= content.length;
-	  	@(content[i] == null));
+		@ requires true;
 	  @ ensures cursorPosition == 0;
-	  @ ensures textBoxRenderer.contentChanged;
+		@ ensures textBoxRenderer != null ==> (textBoxRenderer.contentChanged == true);
+		@ ensures (\forall int i; i>=0 && i<content.length; content[i] == EMPTY);
+		@ ensures true;
+		@ assignable textBoxRenderer.contentChanged, content[*], cursorPosition;
 	  @*/
 	public void clear()
 	{
 		/*@ loop_invariant
-			@ 0 <= i && i <= content.length
-			@        && (\forall int x; 0 <= x && x < content.length; content[x] == null) && content != null;
+		  @ i>= 0 && i <= content.length &&
+			@   (\forall int x; x >= 0 && x < i; content[x] == EMPTY);
+			@ decreasing content.length - i;
 			@ assignable content[*];
-			@ decreasing (content.length) - i;
 			@*/
 		for(int i = 0; i<content.length; i++) {
-			content[i] = null;
+			content[i] = EMPTY;
 		}
 		cursorPosition = 0;
-		if(this.textBoxRenderer != null) this.textBoxRenderer.contentChanged = true;
+		if(this.textBoxRenderer != null) {
+			this.textBoxRenderer.contentChanged = true;
+		}
 	}
 
 	/**
@@ -132,42 +149,48 @@ public class NumericTextBox
 	 */
 	/*@
 	  @ public normal_behavior
-	  @ requires input != null && isSingleDigit(input);
-	  @ ensures content[\old(cursorPosition)] == input;
-	  @ ensures cursorPosition == \old(cursorPosition) + 1;
-	  @ ensures textBoxRenderer != null ==> (textBoxRenderer.contentChanged);
-	  @ assignable content, cursorPosition, textBoxRenderer.contentChanged ;
+	  @ requires input != null && isSingleDigit(input) && cursorPosition < content.length;
+		@ ensures cursorPosition == \old(cursorPosition) + 1;
+		@ ensures content[(\old(cursorPosition))] == input;
+	  @ ensures textBoxRenderer != null ==> textBoxRenderer.contentChanged;
+	  @ assignable content[cursorPosition], cursorPosition, textBoxRenderer.contentChanged ;
 	  @
 	  @ also
 	  @
 	  @ public exceptional_behavior
-	  @ requires input == null || !isSingleDigit(input);
+	  @ requires  cursorPosition < content.length && !isSingleDigit(input);
 	  @ signals_only IllegalArgumentException;
-		@ signals (IllegalArgumentException) textBoxRenderer.showError;
+		@ signals (IllegalArgumentException) textBoxRenderer != null ==> textBoxRenderer.showError;
 	  @ assignable textBoxRenderer.showError;
 	  @
 	  @ also
 	  @
 	  @ public exceptional_behaviour
-	  @ requires cursorPosition == content.length + 1;
+	  @ requires cursorPosition >= content.length && isSingleDigit(input);
 	  @ signals_only RuntimeException;
-		@ signals (RuntimeException) textBoxRenderer.showError;
+		@ signals (RuntimeException) textBoxRenderer != null ==> textBoxRenderer.showError;
 	  @ assignable textBoxRenderer.showError;
 	  @
 	  @*/
 	public void enterCharacter(int input)
 	{
-		if(input == null || !isSingleDigit(input)) {
-			if(this.textBoxRenderer != null) textBoxRenderer.showError = true;
+		if(!isSingleDigit(input)) {
+			if(textBoxRenderer != null) {
+				textBoxRenderer.showError = true;
+			}
 			throw new IllegalArgumentException();
-		}
-		if(cursorPosition >= content.length +1) {
-			if(this.textBoxRenderer != null) textBoxRenderer.showError = true;
+		} else if(cursorPosition >= content.length) {
+			if(textBoxRenderer != null) {
+				textBoxRenderer.showError = true;
+			 }
 			throw new RuntimeException();
+		} else {
+				this.content[cursorPosition] = input;
+				cursorPosition++;
+				if(textBoxRenderer != null) {
+					textBoxRenderer.contentChanged = true;
+				}
 		}
-		this.content[cursorPosition] = input;
-		cursorPosition++;
-		if(this.textBoxRenderer != null) textBoxRenderer.contentChanged = true;
 	}
 
 	/**
@@ -180,31 +203,37 @@ public class NumericTextBox
 	 */
 	/*@
 	  @ public normal_behavior
-	  @ requires cursorPosition > 0;
-	  @ ensures content[cursorPosition] == null;
-	  @ ensures textboxRenderer != null ==> (textBoxRenderer.contentChanged);
+		@ requires cursorPosition > 0;
+		@ requires true;
+	  @ ensures textBoxRenderer != null ==> textBoxRenderer.contentChanged;
 	  @ ensures cursorPosition == \old(cursorPosition) - 1;
-	  @ assignable content, cursorPosition, textBoxRenderer.contentChanged;
+		@ ensures content[cursorPosition] == EMPTY;
+	  @ assignable content[cursorPosition-1], cursorPosition, textBoxRenderer.contentChanged;
 	  @
 	  @ also
 	  @
 	  @ public exceptional_behavior
 	  @ requires cursorPosition == 0;
 	  @ signals_only RuntimeException;
-		@ 	signals RuntimeException textBoxRenderer.showError
+		@ 	signals (RuntimeException) textBoxRenderer != null ==> textBoxRenderer.showError;
 	  @ assignable textBoxRenderer.showError;
 	  @
 	  @*/
 	public void backspace()
 	{
 		if(cursorPosition == 0) {
-			if(this.textBoxRenderer != null) textBoxRenderer.showError = true;
+			if(textBoxRenderer != null) {
+				textBoxRenderer.showError = true;
+			}
 			throw new RuntimeException();
+		} else {
+				cursorPosition--;
+				content[cursorPosition] = EMPTY;
+				if(this.textBoxRenderer != null) {
+					textBoxRenderer.contentChanged = true;
+				}
+			}
 		}
-		content[cursorPosition-1] = null;
-		cursorPosition--;
-		if(this.textBoxRenderer != null) textBoxRenderer.contentChanged = true;
-	}
 }
 
 /**
@@ -217,7 +246,7 @@ class TextBoxRenderer
 	 * Whether the content was changed (so the rendered text box needs a refresh).
 	 */
 	/*@
-	  @ public normal_behavior
+	  @ public invariant
 	  @ requires contentChanged != null;
 	  @*/
 	public /*@spec_public@*/boolean contentChanged = false;
@@ -226,7 +255,7 @@ class TextBoxRenderer
 	 * Whether an exception occured (which should be represented in the rendered text box).
 	 */
 	/*@
-	  @ public normal_behavior
+	  @ public invariant
 	  @ requires showError != null;
 	  @*/
 	public /*@spec_public@*/ boolean showError = false;
